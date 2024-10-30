@@ -23,7 +23,7 @@ public class WeatherAppGui extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // set the size of our gui (in pixels)
-        setSize(450, 650);
+        setSize(450, 800);
 
         // load our gui at the center of the screen
         setLocationRelativeTo(null);
@@ -95,6 +95,18 @@ public class WeatherAppGui extends JFrame {
         windspeedText.setFont(new Font("Dialog", Font.PLAIN, 16));
         add(windspeedText);
 
+        // visibility image
+        URL visibilityUrl = getClass().getClassLoader().getResource("images/visibility.png");
+        JLabel visibilityImage = new JLabel(loadImage(visibilityUrl));
+        visibilityImage.setBounds(15, 600, 74, 66);
+        add(visibilityImage);
+
+        // visibility text
+        JLabel visibilityText = new JLabel("<html><b>Visibility</b> 15km/h</html>");
+        visibilityText.setBounds(200, 600, 200, 55);
+        visibilityText.setFont(new Font("Dialog", Font.PLAIN, 16));
+        add(visibilityText);
+
         // search button
         URL searchUrl = getClass().getClassLoader().getResource("images/search.png");
         JButton searchButton = new JButton(loadImage(searchUrl));
@@ -155,6 +167,10 @@ public class WeatherAppGui extends JFrame {
                 // update windspeed text
                 double windspeed = (double) weatherData.get("windspeed");
                 windspeedText.setText("<html><b>Windspeed</b> " + windspeed + "km/h</html>");
+
+                //update visibility text
+                double visibility = (double) weatherData.get("visibility");
+                visibilityText.setText("<html><b>Visibility<b>" + visibility + "</html>");
             }
         });
         add(searchButton);

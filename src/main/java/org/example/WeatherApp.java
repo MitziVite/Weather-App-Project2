@@ -11,16 +11,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-// retreive weather data from API - this backend logic will fetch the latest weather
-// data from the external API and return it. The GUI will
-// display this data to the user
+
 public class WeatherApp {
-    // fetch weather data for given location
+
     public static JSONObject getWeatherData(String locationName){
-        // get location coordinates using the geolocation API
+
         JSONArray locationData = getLocationData(locationName);
 
-        // extract latitude and longitude data
         JSONObject location = (JSONObject) locationData.get(0);
         double latitude = (double) location.get("latitude");
         double longitude = (double) location.get("longitude");
@@ -28,14 +25,11 @@ public class WeatherApp {
         // build API request URL with location coordinates
         String urlString = "https://api.open-meteo.com/v1/forecast?" +
                 "latitude=" + latitude + "&longitude=" + longitude +
-                "&hourly=temperature_2m,relativehumidity_2m,weathercode,windspeed_10m&timezone=America%2FLos_Angeles";
+                "&hourly=temperature_2m,relativehumidity_2m,weathercode,visibility,windspeed_10m&timezone=America%2FLos_Angeles";
 
         try{
-            // call api and get response
             HttpURLConnection conn = fetchApiResponse(urlString);
 
-            // check for response status
-            // 200 - means that the connection was a success
             if(conn.getResponseCode() != 200){
                 System.out.println("Error: Could not connect to API");
                 return null;
@@ -62,20 +56,18 @@ public class WeatherApp {
             // retrieve hourly data
             JSONObject hourly = (JSONObject) resultJsonObj.get("hourly");
 
-            // we want to get the current hour's data
-            // so we need to get the index of our current hour
+            //  we need to get the index of our current hour
             JSONArray time = (JSONArray) hourly.get("time");
             int index = findIndexOfCurrentTime(time);
 
-            // get temperature
+
             JSONArray temperatureData = (JSONArray) hourly.get("temperature_2m");
             double temperature = (double) temperatureData.get(index);
 
-            // get weather code
             JSONArray weathercode = (JSONArray) hourly.get("weathercode");
             String weatherCondition = convertWeatherCode((long) weathercode.get(index));
 
-            // get humidity
+
             JSONArray relativeHumidity = (JSONArray) hourly.get("relativehumidity_2m");
             long humidity = (long) relativeHumidity.get(index);
 
@@ -83,12 +75,17 @@ public class WeatherApp {
             JSONArray windspeedData = (JSONArray) hourly.get("windspeed_10m");
             double windspeed = (double) windspeedData.get(index);
 
+            // get visibility
+            JSONArray visibilityData = (JSONArray) hourly.get("visibility");
+            double visibility = (double) visibilityData.get(index);
+
             // build the weather json data object that we are going to access in our frontend
             JSONObject weatherData = new JSONObject();
             weatherData.put("temperature", temperature);
             weatherData.put("weather_condition", weatherCondition);
             weatherData.put("humidity", humidity);
             weatherData.put("windspeed", windspeed);
+            weatherData.put("visibility", visibility);
 
             return weatherData;
         }catch(Exception e){
@@ -111,8 +108,7 @@ public class WeatherApp {
             // call api and get a response
             HttpURLConnection conn = fetchApiResponse(urlString);
 
-            // check response status
-            // 200 means successful connection
+
             if(conn.getResponseCode() != 200){
                 System.out.println("Error: Could not connect to API");
                 return null;
