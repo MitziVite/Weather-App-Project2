@@ -5,7 +5,7 @@ This project is a desktop application built in Java that provides a graphical us
 It uses Java Swing for the interface and an external weather API to fetch real-time weather data. 
 The purpose of this project was to explore Java syntax and improve GUI component handling in a desktop application.
 
-[Software Demo Video](https://www.loom.com/share/ba6cc3e53b844508a475932146825c6f?sid=ba105354-fce0-4ea9-a396-00b2453d5150)
+[Software Demo Video](https://www.loom.com/share/a994aa6f199146d1a791bae2f0a545bd?sid=31a852a9-6ee2-4bcb-bd45-3304534ec686)
 
 ## Development Environment
 
